@@ -1,4 +1,4 @@
-<div class="apidocDiv">
+<html><head></head><body><div class="apidocDiv">
 <style>
 /*csslint
 */
@@ -47,17 +47,10 @@
 }
 </style>
 <h1>api documentation for
-    <a
-
-        href="https://github.com/TooTallNate/keypress#readme"
-
-    >keypress (v0.2.1)</a>
+    <a href="https://github.com/TooTallNate/keypress#readme">keypress (v0.2.1)</a>
 </h1>
 <h4>Make any Node ReadableStream emit "keypress" events</h4>
-<div class="apidocSectionDiv"><a
-    href="#apidoc.tableOfContents"
-    id="apidoc.tableOfContents"
-><h1>table of contents</h1></a><ol>
+<div class="apidocSectionDiv"><a href="#apidoc.tableOfContents" id="apidoc.tableOfContents"><h1>table of contents</h1></a><ol>
 
     <li class="apidocModuleLi"><a href="#apidoc.module.keypress">module keypress</a><ol>
 
@@ -154,31 +147,31 @@
     <li>description and source-code<pre class="apidocCodePre">function keypress(stream) {
   if (isEmittingKeypress(stream)) return;
 
-  var StringDecoder = require(&#x27;string_decoder&#x27;).StringDecoder; // lazy load
-  stream._keypressDecoder = new StringDecoder(&#x27;utf8&#x27;);
+  var StringDecoder = require('string_decoder').StringDecoder; // lazy load
+  stream._keypressDecoder = new StringDecoder('utf8');
 
   function onData(b) {
-    if (listenerCount(stream, &#x27;keypress&#x27;) &#x3e; 0) {
+    if (listenerCount(stream, 'keypress') &gt; 0) {
       var r = stream._keypressDecoder.write(b);
       if (r) emitKey(stream, r);
     } else {
-      // Nobody&#x27;s watching anyway
-      stream.removeListener(&#x27;data&#x27;, onData);
-      stream.on(&#x27;newListener&#x27;, onNewListener);
+      // Nobody's watching anyway
+      stream.removeListener('data', onData);
+      stream.on('newListener', onNewListener);
     }
   }
 
   function onNewListener(event) {
-    if (event == &#x27;keypress&#x27;) {
-      stream.on(&#x27;data&#x27;, onData);
-      stream.removeListener(&#x27;newListener&#x27;, onNewListener);
+    if (event == 'keypress') {
+      stream.on('data', onData);
+      stream.removeListener('newListener', onNewListener);
     }
   }
 
-  if (listenerCount(stream, &#x27;keypress&#x27;) &#x3e; 0) {
-    stream.on(&#x27;data&#x27;, onData);
+  if (listenerCount(stream, 'keypress') &gt; 0) {
+    stream.on('data', onData);
   } else {
-    stream.on(&#x27;newListener&#x27;, onNewListener);
+    stream.on('newListener', onNewListener);
   }
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">n/a</pre></li>
@@ -194,14 +187,14 @@
     </h2>
     <ul>
     <li>description and source-code<pre class="apidocCodePre">disableMouse = function (stream) {
-  stream.write(&#x27;\x1b[?1000l&#x27;);
+  stream.write('\x1b[?1000l');
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">...
-process.stdin.on(&#x27;mousepress&#x27;, function (info) {
-  console.log(&#x27;got &#x22;mousepress&#x22; event at %d x %d&#x27;, info.x, info.y);
+process.stdin.on('mousepress', function (info) {
+  console.log('got "mousepress" event at %d x %d', info.x, info.y);
 });
 
-process.on(&#x27;exit&#x27;, function () {
+process.on('exit', function () {
   // disable mouse on exit, so that the state
   // is back to normal for the terminal
   keypress.<span class="apidocCodeKeywordSpan">disableMouse</span>(process.stdout);
@@ -224,23 +217,23 @@ License
     </h2>
     <ul>
     <li>description and source-code<pre class="apidocCodePre">enableMouse = function (stream) {
-  stream.write(&#x27;\x1b[?1000h&#x27;);
+  stream.write('\x1b[?1000h');
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">...
 ``` js
-var keypress = require(&#x27;keypress&#x27;);
+var keypress = require('keypress');
 
-// make `process.stdin` begin emitting &#x22;mousepress&#x22; (and &#x22;keypress&#x22;) events
+// make `process.stdin` begin emitting "mousepress" (and "keypress") events
 keypress(process.stdin);
 
 // you must enable the mouse events before they will begin firing
 keypress.<span class="apidocCodeKeywordSpan">enableMouse</span>(process.stdout);
 
-process.stdin.on(&#x27;mousepress&#x27;, function (info) {
-console.log(&#x27;got &#x22;mousepress&#x22; event at %d x %d&#x27;, info.x, info.y);
+process.stdin.on('mousepress', function (info) {
+console.log('got "mousepress" event at %d x %d', info.x, info.y);
 });
 
-process.on(&#x27;exit&#x27;, function () {
+process.on('exit', function () {
 // disable mouse on exit, so that the state
 ...</pre></li>
     </ul>
@@ -262,16 +255,16 @@ function isEmittingKeypress(stream) {
 var rtn = !!stream._keypressDecoder;
 if (!rtn) {
   // XXX: for older versions of node (v0.6.x, v0.8.x) we want to remove the
-  // existing &#x22;data&#x22; and &#x22;newListener&#x22; keypress events since they won&#x27;t include
-  // this `keypress` module extensions (like &#x22;mousepress&#x22; events).
-  stream.listeners(&#x27;data&#x27;).slice(0).forEach(function(l) {
-    if (l.name == &#x27;onData&#x27; &#x26;&#x26; /emitKey/.test(l.<span class="apidocCodeKeywordSpan">toString</span>())) {
-      stream.removeListener(&#x27;data&#x27;, l);
+  // existing "data" and "newListener" keypress events since they won't include
+  // this `keypress` module extensions (like "mousepress" events).
+  stream.listeners('data').slice(0).forEach(function(l) {
+    if (l.name == 'onData' &amp;&amp; /emitKey/.test(l.<span class="apidocCodeKeywordSpan">toString</span>())) {
+      stream.removeListener('data', l);
     }
   });
-  stream.listeners(&#x27;newListener&#x27;).slice(0).forEach(function(l) {
-    if (l.name == &#x27;onNewListener&#x27; &#x26;&#x26; /keypress/.test(l.toString())) {
-      stream.removeListener(&#x27;newListener&#x27;, l);
+  stream.listeners('newListener').slice(0).forEach(function(l) {
+    if (l.name == 'onNewListener' &amp;&amp; /keypress/.test(l.toString())) {
+      stream.removeListener('newListener', l);
     }
 ...</pre></li>
     </ul>
@@ -291,14 +284,14 @@ if (!rtn) {
     </h2>
     <ul>
     <li>description and source-code<pre class="apidocCodePre">disableMouse = function (stream) {
-  stream.write(&#x27;\x1b[?1000l&#x27;);
+  stream.write('\x1b[?1000l');
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">...
-process.stdin.on(&#x27;mousepress&#x27;, function (info) {
-  console.log(&#x27;got &#x22;mousepress&#x22; event at %d x %d&#x27;, info.x, info.y);
+process.stdin.on('mousepress', function (info) {
+  console.log('got "mousepress" event at %d x %d', info.x, info.y);
 });
 
-process.on(&#x27;exit&#x27;, function () {
+process.on('exit', function () {
   // disable mouse on exit, so that the state
   // is back to normal for the terminal
   keypress.<span class="apidocCodeKeywordSpan">disableMouse</span>(process.stdout);
@@ -326,23 +319,23 @@ License
     </h2>
     <ul>
     <li>description and source-code<pre class="apidocCodePre">enableMouse = function (stream) {
-  stream.write(&#x27;\x1b[?1000h&#x27;);
+  stream.write('\x1b[?1000h');
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">...
 ``` js
-var keypress = require(&#x27;keypress&#x27;);
+var keypress = require('keypress');
 
-// make `process.stdin` begin emitting &#x22;mousepress&#x22; (and &#x22;keypress&#x22;) events
+// make `process.stdin` begin emitting "mousepress" (and "keypress") events
 keypress(process.stdin);
 
 // you must enable the mouse events before they will begin firing
 keypress.<span class="apidocCodeKeywordSpan">enableMouse</span>(process.stdout);
 
-process.stdin.on(&#x27;mousepress&#x27;, function (info) {
-console.log(&#x27;got &#x22;mousepress&#x22; event at %d x %d&#x27;, info.x, info.y);
+process.stdin.on('mousepress', function (info) {
+console.log('got "mousepress" event at %d x %d', info.x, info.y);
 });
 
-process.on(&#x27;exit&#x27;, function () {
+process.on('exit', function () {
 // disable mouse on exit, so that the state
 ...</pre></li>
     </ul>
@@ -367,16 +360,16 @@ function isEmittingKeypress(stream) {
 var rtn = !!stream._keypressDecoder;
 if (!rtn) {
   // XXX: for older versions of node (v0.6.x, v0.8.x) we want to remove the
-  // existing &#x22;data&#x22; and &#x22;newListener&#x22; keypress events since they won&#x27;t include
-  // this `keypress` module extensions (like &#x22;mousepress&#x22; events).
-  stream.listeners(&#x27;data&#x27;).slice(0).forEach(function(l) {
-    if (l.name == &#x27;onData&#x27; &#x26;&#x26; /emitKey/.test(l.<span class="apidocCodeKeywordSpan">toString</span>())) {
-      stream.removeListener(&#x27;data&#x27;, l);
+  // existing "data" and "newListener" keypress events since they won't include
+  // this `keypress` module extensions (like "mousepress" events).
+  stream.listeners('data').slice(0).forEach(function(l) {
+    if (l.name == 'onData' &amp;&amp; /emitKey/.test(l.<span class="apidocCodeKeywordSpan">toString</span>())) {
+      stream.removeListener('data', l);
     }
   });
-  stream.listeners(&#x27;newListener&#x27;).slice(0).forEach(function(l) {
-    if (l.name == &#x27;onNewListener&#x27; &#x26;&#x26; /keypress/.test(l.toString())) {
-      stream.removeListener(&#x27;newListener&#x27;, l);
+  stream.listeners('newListener').slice(0).forEach(function(l) {
+    if (l.name == 'onNewListener' &amp;&amp; /keypress/.test(l.toString())) {
+      stream.removeListener('newListener', l);
     }
 ...</pre></li>
     </ul>
@@ -390,3 +383,4 @@ if (!rtn) {
     ]
 </div>
 </div>
+</body></html>

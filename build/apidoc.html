@@ -63,6 +63,15 @@
 
         <li>
 
+            <a class="apidocElementLiA" href="#apidoc.element.keypress.keypress">
+            function <span class="apidocSignatureSpan"></span>keypress
+            <span class="apidocSignatureSpan">(stream)</span>
+            </a>
+
+        </li>
+
+        <li>
+
             <a class="apidocElementLiA" href="#apidoc.element.keypress.disableMouse">
             function <span class="apidocSignatureSpan">keypress.</span>disableMouse
             <span class="apidocSignatureSpan">(stream)</span>
@@ -79,12 +88,102 @@
 
         </li>
 
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.keypress.toString">
+            function <span class="apidocSignatureSpan">keypress.</span>toString
+            <span class="apidocSignatureSpan">()</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.keypress.disableMouse">module keypress.disableMouse</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.keypress.disableMouse.disableMouse">
+            function <span class="apidocSignatureSpan">keypress.</span>disableMouse
+            <span class="apidocSignatureSpan">(stream)</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.keypress.enableMouse">module keypress.enableMouse</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.keypress.enableMouse.enableMouse">
+            function <span class="apidocSignatureSpan">keypress.</span>enableMouse
+            <span class="apidocSignatureSpan">(stream)</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.keypress.toString">module keypress.toString</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.keypress.toString.toString">
+            function <span class="apidocSignatureSpan">keypress.</span>toString
+            <span class="apidocSignatureSpan">()</span>
+            </a>
+
+        </li>
+
     </ol></li>
 
 </ol></div>
 
 <div class="apidocSectionDiv">
 <h1><a href="#apidoc.module.keypress" id="apidoc.module.keypress">module keypress</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.keypress.keypress" id="apidoc.element.keypress.keypress">
+        function <span class="apidocSignatureSpan"></span>keypress
+        <span class="apidocSignatureSpan">(stream)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function keypress(stream) {
+  if (isEmittingKeypress(stream)) return;
+
+  var StringDecoder = require(&#x27;string_decoder&#x27;).StringDecoder; // lazy load
+  stream._keypressDecoder = new StringDecoder(&#x27;utf8&#x27;);
+
+  function onData(b) {
+    if (listenerCount(stream, &#x27;keypress&#x27;) &#x3e; 0) {
+      var r = stream._keypressDecoder.write(b);
+      if (r) emitKey(stream, r);
+    } else {
+      // Nobody&#x27;s watching anyway
+      stream.removeListener(&#x27;data&#x27;, onData);
+      stream.on(&#x27;newListener&#x27;, onNewListener);
+    }
+  }
+
+  function onNewListener(event) {
+    if (event == &#x27;keypress&#x27;) {
+      stream.on(&#x27;data&#x27;, onData);
+      stream.removeListener(&#x27;newListener&#x27;, onNewListener);
+    }
+  }
+
+  if (listenerCount(stream, &#x27;keypress&#x27;) &#x3e; 0) {
+    stream.on(&#x27;data&#x27;, onData);
+  } else {
+    stream.on(&#x27;newListener&#x27;, onNewListener);
+  }
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
 
 
     <h2>
@@ -143,6 +242,142 @@ console.log(&#x27;got &#x22;mousepress&#x22; event at %d x %d&#x27;, info.x, inf
 
 process.on(&#x27;exit&#x27;, function () {
 // disable mouse on exit, so that the state
+...</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.keypress.toString" id="apidoc.element.keypress.toString">
+        function <span class="apidocSignatureSpan">keypress.</span>toString
+        <span class="apidocSignatureSpan">()</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">toString = function () {
+    return text;
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+function isEmittingKeypress(stream) {
+var rtn = !!stream._keypressDecoder;
+if (!rtn) {
+  // XXX: for older versions of node (v0.6.x, v0.8.x) we want to remove the
+  // existing &#x22;data&#x22; and &#x22;newListener&#x22; keypress events since they won&#x27;t include
+  // this `keypress` module extensions (like &#x22;mousepress&#x22; events).
+  stream.listeners(&#x27;data&#x27;).slice(0).forEach(function(l) {
+    if (l.name == &#x27;onData&#x27; &#x26;&#x26; /emitKey/.test(l.<span class="apidocCodeKeywordSpan">toString</span>())) {
+      stream.removeListener(&#x27;data&#x27;, l);
+    }
+  });
+  stream.listeners(&#x27;newListener&#x27;).slice(0).forEach(function(l) {
+    if (l.name == &#x27;onNewListener&#x27; &#x26;&#x26; /keypress/.test(l.toString())) {
+      stream.removeListener(&#x27;newListener&#x27;, l);
+    }
+...</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.keypress.disableMouse" id="apidoc.module.keypress.disableMouse">module keypress.disableMouse</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.keypress.disableMouse.disableMouse" id="apidoc.element.keypress.disableMouse.disableMouse">
+        function <span class="apidocSignatureSpan">keypress.</span>disableMouse
+        <span class="apidocSignatureSpan">(stream)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">disableMouse = function (stream) {
+  stream.write(&#x27;\x1b[?1000l&#x27;);
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+process.stdin.on(&#x27;mousepress&#x27;, function (info) {
+  console.log(&#x27;got &#x22;mousepress&#x22; event at %d x %d&#x27;, info.x, info.y);
+});
+
+process.on(&#x27;exit&#x27;, function () {
+  // disable mouse on exit, so that the state
+  // is back to normal for the terminal
+  keypress.<span class="apidocCodeKeywordSpan">disableMouse</span>(process.stdout);
+});
+```
+
+
+License
+-------
+...</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.keypress.enableMouse" id="apidoc.module.keypress.enableMouse">module keypress.enableMouse</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.keypress.enableMouse.enableMouse" id="apidoc.element.keypress.enableMouse.enableMouse">
+        function <span class="apidocSignatureSpan">keypress.</span>enableMouse
+        <span class="apidocSignatureSpan">(stream)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">enableMouse = function (stream) {
+  stream.write(&#x27;\x1b[?1000h&#x27;);
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+``` js
+var keypress = require(&#x27;keypress&#x27;);
+
+// make `process.stdin` begin emitting &#x22;mousepress&#x22; (and &#x22;keypress&#x22;) events
+keypress(process.stdin);
+
+// you must enable the mouse events before they will begin firing
+keypress.<span class="apidocCodeKeywordSpan">enableMouse</span>(process.stdout);
+
+process.stdin.on(&#x27;mousepress&#x27;, function (info) {
+console.log(&#x27;got &#x22;mousepress&#x22; event at %d x %d&#x27;, info.x, info.y);
+});
+
+process.on(&#x27;exit&#x27;, function () {
+// disable mouse on exit, so that the state
+...</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.keypress.toString" id="apidoc.module.keypress.toString">module keypress.toString</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.keypress.toString.toString" id="apidoc.element.keypress.toString.toString">
+        function <span class="apidocSignatureSpan">keypress.</span>toString
+        <span class="apidocSignatureSpan">()</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function toString() { [native code] }</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+function isEmittingKeypress(stream) {
+var rtn = !!stream._keypressDecoder;
+if (!rtn) {
+  // XXX: for older versions of node (v0.6.x, v0.8.x) we want to remove the
+  // existing &#x22;data&#x22; and &#x22;newListener&#x22; keypress events since they won&#x27;t include
+  // this `keypress` module extensions (like &#x22;mousepress&#x22; events).
+  stream.listeners(&#x27;data&#x27;).slice(0).forEach(function(l) {
+    if (l.name == &#x27;onData&#x27; &#x26;&#x26; /emitKey/.test(l.<span class="apidocCodeKeywordSpan">toString</span>())) {
+      stream.removeListener(&#x27;data&#x27;, l);
+    }
+  });
+  stream.listeners(&#x27;newListener&#x27;).slice(0).forEach(function(l) {
+    if (l.name == &#x27;onNewListener&#x27; &#x26;&#x26; /keypress/.test(l.toString())) {
+      stream.removeListener(&#x27;newListener&#x27;, l);
+    }
 ...</pre></li>
     </ul>
 
