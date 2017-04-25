@@ -81,54 +81,6 @@
 
         </li>
 
-        <li>
-
-            <a class="apidocElementLiA" href="#apidoc.element.keypress.toString">
-            function <span class="apidocSignatureSpan">keypress.</span>toString
-            <span class="apidocSignatureSpan">()</span>
-            </a>
-
-        </li>
-
-    </ol></li>
-
-    <li class="apidocModuleLi"><a href="#apidoc.module.keypress.disableMouse">module keypress.disableMouse</a><ol>
-
-        <li>
-
-            <a class="apidocElementLiA" href="#apidoc.element.keypress.disableMouse.disableMouse">
-            function <span class="apidocSignatureSpan">keypress.</span>disableMouse
-            <span class="apidocSignatureSpan">(stream)</span>
-            </a>
-
-        </li>
-
-    </ol></li>
-
-    <li class="apidocModuleLi"><a href="#apidoc.module.keypress.enableMouse">module keypress.enableMouse</a><ol>
-
-        <li>
-
-            <a class="apidocElementLiA" href="#apidoc.element.keypress.enableMouse.enableMouse">
-            function <span class="apidocSignatureSpan">keypress.</span>enableMouse
-            <span class="apidocSignatureSpan">(stream)</span>
-            </a>
-
-        </li>
-
-    </ol></li>
-
-    <li class="apidocModuleLi"><a href="#apidoc.module.keypress.toString">module keypress.toString</a><ol>
-
-        <li>
-
-            <a class="apidocElementLiA" href="#apidoc.element.keypress.toString.toString">
-            function <span class="apidocSignatureSpan">keypress.</span>toString
-            <span class="apidocSignatureSpan">()</span>
-            </a>
-
-        </li>
-
     </ol></li>
 
 </ol></div>
@@ -190,20 +142,22 @@
   stream.write('\x1b[?1000l');
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">...
-process.stdin.on('mousepress', function (info) {
-  console.log('got "mousepress" event at %d x %d', info.x, info.y);
-});
-
-process.on('exit', function () {
-  // disable mouse on exit, so that the state
-  // is back to normal for the terminal
-  keypress.<span class="apidocCodeKeywordSpan">disableMouse</span>(process.stdout);
-});
-```
-
-
-License
--------
+  {
+    "name": "tootallnate",
+    "email": "nathan@tootallnate.net"
+  }
+],
+"name": "keypress",
+"optionalDependencies": {},
+"readme": "keypress\n========\n### Make any Node ReadableStream emit \"keypress\" events\n\n\nPrevious
+to Node `v0.8.x`, there was an undocumented `\"keypress\"` event that\n`process.stdin` would emit when it was a TTY. Some people discovered this hidden\ngem, and started using it in their own code.\n\nNow in Node `v0.8.x`, this `\"keypress\"` event does not get emitted by default,\nbut rather only when it is being used in conjuction with the `readline` (or by\nextension, the `repl`) module.\n\nThis module is the exact logic from the node `v0.8.x` releases ripped out into its\nown module.\n\n__Bonus:__ Now with mouse support!\n\nInstallation\n------------\n\nInstall with `npm`:\n\n``` bash\n$ npm install keypress\n```\n\nOr add it to the `\"dependencies\"` section of your _package.json_ file.\n\n\nExample\n-------\n\n#### Listening for \"keypress\" events\n\n``` js\nvar keypress = require('keypress');\n\n// make `process.stdin` begin emitting \"keypress\" events\nkeypress(process.stdin);\n\n// listen for the \"keypress\" event\nprocess.stdin.on('keypress', function (ch, key) {\n  console.log('got \"keypress\"', key);\n  if (key &amp;&amp; key.ctrl &amp;&amp; key.name == 'c') {\n    process.stdin.pause();\n  }\n});\n\nprocess.stdin.setRawMode(true);\nprocess.stdin.resume();\n```\n\n#### Listening for \"mousepress\" events\n\n``` js\nvar keypress = require('keypress');\n\n// make `process.stdin` begin emitting \"mousepress\" (and \"keypress\") events\nkeypress(process.stdin);\n\n// you must enable the mouse events before they will begin firing\nkeypress.enableMouse(process.stdout);\n\nprocess.stdin.on('mousepress', function (info) {\n  console.log('got \"mousepress\" event at %d x %d', info.x, info.y);\n});\n\nprocess.on('exit', function () {\n  // disable mouse on exit, so that the state\n  // is back to normal for the terminal\n  keypress.<span class="apidocCodeKeywordSpan">disableMouse</span>(process.stdout);\n});\n```\n\n\nLicense\n-------\n\n(The MIT License)\n\nCopyright (c) 2012 Nathan Rajlich &amp;lt;nathan@tootallnate.net&amp;gt;\n\nPermission is hereby granted, free of charge, to any person obtaining\na copy of this software and associated documentation files (the\n'Software'), to deal in the Software without restriction, including\nwithout limitation the rights to use, copy, modify, merge, publish,\ndistribute, sublicense, and/or sell copies of the Software, and to\npermit persons to whom the Software is furnished to do so, subject to\nthe following conditions:\n\nThe above copyright notice and this permission notice shall be\nincluded in all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,\nEXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF\nMERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.\nIN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY\nCLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,\nTORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE\nSOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.\n",
+"readmeFilename": "README.md",
+"repository": {
+  "type": "git",
+  "url": "git://github.com/TooTallNate/keypress.git"
+},
+"scripts": {
+  "test": "echo \"Error: no test specified\" &amp;&amp; exit 1"
 ...</pre></li>
     </ul>
 
@@ -220,157 +174,22 @@ License
   stream.write('\x1b[?1000h');
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">...
-``` js
-var keypress = require('keypress');
-
-// make `process.stdin` begin emitting "mousepress" (and "keypress") events
-keypress(process.stdin);
-
-// you must enable the mouse events before they will begin firing
-keypress.<span class="apidocCodeKeywordSpan">enableMouse</span>(process.stdout);
-
-process.stdin.on('mousepress', function (info) {
-console.log('got "mousepress" event at %d x %d', info.x, info.y);
-});
-
-process.on('exit', function () {
-// disable mouse on exit, so that the state
-...</pre></li>
-    </ul>
-
-
-
-    <h2>
-        <a href="#apidoc.element.keypress.toString" id="apidoc.element.keypress.toString">
-        function <span class="apidocSignatureSpan">keypress.</span>toString
-        <span class="apidocSignatureSpan">()</span>
-        </a>
-    </h2>
-    <ul>
-    <li>description and source-code<pre class="apidocCodePre">toString = function () {
-    return text;
-}</pre></li>
-    <li>example usage<pre class="apidocCodePre">...
-function isEmittingKeypress(stream) {
-var rtn = !!stream._keypressDecoder;
-if (!rtn) {
-  // XXX: for older versions of node (v0.6.x, v0.8.x) we want to remove the
-  // existing "data" and "newListener" keypress events since they won't include
-  // this `keypress` module extensions (like "mousepress" events).
-  stream.listeners('data').slice(0).forEach(function(l) {
-    if (l.name == 'onData' &amp;&amp; /emitKey/.test(l.<span class="apidocCodeKeywordSpan">toString</span>())) {
-      stream.removeListener('data', l);
-    }
-  });
-  stream.listeners('newListener').slice(0).forEach(function(l) {
-    if (l.name == 'onNewListener' &amp;&amp; /keypress/.test(l.toString())) {
-      stream.removeListener('newListener', l);
-    }
-...</pre></li>
-    </ul>
-
-
-</div>
-
-<div class="apidocSectionDiv">
-<h1><a href="#apidoc.module.keypress.disableMouse" id="apidoc.module.keypress.disableMouse">module keypress.disableMouse</a></h1>
-
-
-    <h2>
-        <a href="#apidoc.element.keypress.disableMouse.disableMouse" id="apidoc.element.keypress.disableMouse.disableMouse">
-        function <span class="apidocSignatureSpan">keypress.</span>disableMouse
-        <span class="apidocSignatureSpan">(stream)</span>
-        </a>
-    </h2>
-    <ul>
-    <li>description and source-code<pre class="apidocCodePre">disableMouse = function (stream) {
-  stream.write('\x1b[?1000l');
-}</pre></li>
-    <li>example usage<pre class="apidocCodePre">...
-process.stdin.on('mousepress', function (info) {
-  console.log('got "mousepress" event at %d x %d', info.x, info.y);
-});
-
-process.on('exit', function () {
-  // disable mouse on exit, so that the state
-  // is back to normal for the terminal
-  keypress.<span class="apidocCodeKeywordSpan">disableMouse</span>(process.stdout);
-});
-```
-
-
-License
--------
-...</pre></li>
-    </ul>
-
-
-</div>
-
-<div class="apidocSectionDiv">
-<h1><a href="#apidoc.module.keypress.enableMouse" id="apidoc.module.keypress.enableMouse">module keypress.enableMouse</a></h1>
-
-
-    <h2>
-        <a href="#apidoc.element.keypress.enableMouse.enableMouse" id="apidoc.element.keypress.enableMouse.enableMouse">
-        function <span class="apidocSignatureSpan">keypress.</span>enableMouse
-        <span class="apidocSignatureSpan">(stream)</span>
-        </a>
-    </h2>
-    <ul>
-    <li>description and source-code<pre class="apidocCodePre">enableMouse = function (stream) {
-  stream.write('\x1b[?1000h');
-}</pre></li>
-    <li>example usage<pre class="apidocCodePre">...
-``` js
-var keypress = require('keypress');
-
-// make `process.stdin` begin emitting "mousepress" (and "keypress") events
-keypress(process.stdin);
-
-// you must enable the mouse events before they will begin firing
-keypress.<span class="apidocCodeKeywordSpan">enableMouse</span>(process.stdout);
-
-process.stdin.on('mousepress', function (info) {
-console.log('got "mousepress" event at %d x %d', info.x, info.y);
-});
-
-process.on('exit', function () {
-// disable mouse on exit, so that the state
-...</pre></li>
-    </ul>
-
-
-</div>
-
-<div class="apidocSectionDiv">
-<h1><a href="#apidoc.module.keypress.toString" id="apidoc.module.keypress.toString">module keypress.toString</a></h1>
-
-
-    <h2>
-        <a href="#apidoc.element.keypress.toString.toString" id="apidoc.element.keypress.toString.toString">
-        function <span class="apidocSignatureSpan">keypress.</span>toString
-        <span class="apidocSignatureSpan">()</span>
-        </a>
-    </h2>
-    <ul>
-    <li>description and source-code<pre class="apidocCodePre">function toString() { [native code] }</pre></li>
-    <li>example usage<pre class="apidocCodePre">...
-function isEmittingKeypress(stream) {
-var rtn = !!stream._keypressDecoder;
-if (!rtn) {
-  // XXX: for older versions of node (v0.6.x, v0.8.x) we want to remove the
-  // existing "data" and "newListener" keypress events since they won't include
-  // this `keypress` module extensions (like "mousepress" events).
-  stream.listeners('data').slice(0).forEach(function(l) {
-    if (l.name == 'onData' &amp;&amp; /emitKey/.test(l.<span class="apidocCodeKeywordSpan">toString</span>())) {
-      stream.removeListener('data', l);
-    }
-  });
-  stream.listeners('newListener').slice(0).forEach(function(l) {
-    if (l.name == 'onNewListener' &amp;&amp; /keypress/.test(l.toString())) {
-      stream.removeListener('newListener', l);
-    }
+  {
+    "name": "tootallnate",
+    "email": "nathan@tootallnate.net"
+  }
+],
+"name": "keypress",
+"optionalDependencies": {},
+"readme": "keypress\n========\n### Make any Node ReadableStream emit \"keypress\" events\n\n\nPrevious
+to Node `v0.8.x`, there was an undocumented `\"keypress\"` event that\n`process.stdin` would emit when it was a TTY. Some people discovered this hidden\ngem, and started using it in their own code.\n\nNow in Node `v0.8.x`, this `\"keypress\"` event does not get emitted by default,\nbut rather only when it is being used in conjuction with the `readline` (or by\nextension, the `repl`) module.\n\nThis module is the exact logic from the node `v0.8.x` releases ripped out into its\nown module.\n\n__Bonus:__ Now with mouse support!\n\nInstallation\n------------\n\nInstall with `npm`:\n\n``` bash\n$ npm install keypress\n```\n\nOr add it to the `\"dependencies\"` section of your _package.json_ file.\n\n\nExample\n-------\n\n#### Listening for \"keypress\" events\n\n``` js\nvar keypress = require('keypress');\n\n// make `process.stdin` begin emitting \"keypress\" events\nkeypress(process.stdin);\n\n// listen for the \"keypress\" event\nprocess.stdin.on('keypress', function (ch, key) {\n  console.log('got \"keypress\"', key);\n  if (key &amp;&amp; key.ctrl &amp;&amp; key.name == 'c') {\n    process.stdin.pause();\n  }\n});\n\nprocess.stdin.setRawMode(true);\nprocess.stdin.resume();\n```\n\n#### Listening for \"mousepress\" events\n\n``` js\nvar keypress = require('keypress');\n\n// make `process.stdin` begin emitting \"mousepress\" (and \"keypress\") events\nkeypress(process.stdin);\n\n// you must enable the mouse events before they will begin firing\nkeypress.<span class="apidocCodeKeywordSpan">enableMouse</span>(process.stdout);\n\nprocess.stdin.on('mousepress', function (info) {\n  console.log('got \"mousepress\" event at %d x %d', info.x, info.y);\n});\n\nprocess.on('exit', function () {\n  // disable mouse on exit, so that the state\n  // is back to normal for the terminal\n  keypress.disableMouse(process.stdout);\n});\n```\n\n\nLicense\n-------\n\n(The MIT License)\n\nCopyright (c) 2012 Nathan Rajlich &amp;lt;nathan@tootallnate.net&amp;gt;\n\nPermission is hereby granted, free of charge, to any person obtaining\na copy of this software and associated documentation files (the\n'Software'), to deal in the Software without restriction, including\nwithout limitation the rights to use, copy, modify, merge, publish,\ndistribute, sublicense, and/or sell copies of the Software, and to\npermit persons to whom the Software is furnished to do so, subject to\nthe following conditions:\n\nThe above copyright notice and this permission notice shall be\nincluded in all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,\nEXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF\nMERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.\nIN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY\nCLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,\nTORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE\nSOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.\n",
+"readmeFilename": "README.md",
+"repository": {
+  "type": "git",
+  "url": "git://github.com/TooTallNate/keypress.git"
+},
+"scripts": {
+  "test": "echo \"Error: no test specified\" &amp;&amp; exit 1"
 ...</pre></li>
     </ul>
 
