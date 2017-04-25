@@ -1,8 +1,8 @@
 # npmdoc-keypress
 
-api documentation for  [keypress (v0.2.1)](https://github.com/TooTallNate/keypress#readme)  [![npm package](https://img.shields.io/npm/v/npmdoc-keypress.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-keypress) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-keypress.svg)](https://travis-ci.org/npmdoc/node-npmdoc-keypress)
+#### basic api documentation for  [keypress (v0.2.1)](https://github.com/TooTallNate/keypress#readme)  [![npm package](https://img.shields.io/npm/v/npmdoc-keypress.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-keypress) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-keypress.svg)](https://travis-ci.org/npmdoc/node-npmdoc-keypress)
 
-Make any Node ReadableStream emit "keypress" events
+#### Make any Node ReadableStream emit "keypress" events
 
 [![NPM](https://nodei.co/npm/keypress.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/keypress)
 
@@ -59,7 +59,8 @@ Make any Node ReadableStream emit "keypress" events
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"
     },
-    "version": "0.2.1"
+    "version": "0.2.1",
+    "bin": {}
 }
 ```
 
